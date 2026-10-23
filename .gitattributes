@@ -1,0 +1,6 @@
+* text=auto eol=lf
+*.gif binary
+*.png binary
+*.ico binary
+*.ttf binary
+licenses/** -whitespace

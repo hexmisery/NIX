@@ -1,0 +1,45 @@
+Catalog data:
+Maigret: https://github.com/soxoj/maigret (MIT, see Maigret-LICENSE.txt)
+Sherlock: https://github.com/sherlock-project/sherlock (MIT, see Sherlock-LICENSE.txt)
+WhatsMyName: https://github.com/WebBreacher/WhatsMyName
+Copyright (C) 2015-2026 Micah Hoffman and contributors.
+Creative Commons Attribution-ShareAlike 4.0 International:
+https://creativecommons.org/licenses/by-sa/4.0/
+Original data, including author lists, is retained in nickatlas/assets/catalogs.
+Runtime normalization does not change the license of the source dataset.
+
+Blackbird: https://github.com/antoniaci/blackbird
+Uses WhatsMyName. No Blackbird executable, code or AI service is included.
+
+Golos Text: SIL Open Font License, see GolosText-OFL.txt.
+Onest: Google Fonts / The Onest Project Authors, SIL Open Font License.
+https://github.com/google/fonts/tree/main/ofl/onest (see Onest-OFL.txt).
+aiohttp: Apache-2.0 and MIT, as included in its distribution.
+
+Social Analyzer catalog: https://github.com/qeeqbox/social-analyzer
+Copyright qeeqbox and contributors. AGPL-3.0, see SocialAnalyzer-LICENSE.txt.
+Unmodified dataset source: nickatlas/assets/catalogs/socialanalyzer.json.
+No Social Analyzer executable or browser automation is included.
+
+NExfil catalog: https://github.com/thewhiteh4t/nexfil (MIT).
+Forum directory factual URLs: https://discover.discourse.com (Discourse Discover).
+Directory entries are converted to NIX rules; descriptions and user records are not included.
+
+Mastodon directory factual domains: https://api.joinmastodon.org/servers
+Instance peer discovery: https://docs.joinmastodon.org/methods/instance/#peers
+Only domains are retained. Directory descriptions, images and user records are not copied.
+
+FediDB server dataset: https://fedidb.com/datasets
+Data from FediDB (https://fedidb.com/datasets), CC BY 4.0.
+Snapshot: 2026-10-18. Converted to username URL and WebFinger templates;
+only supported platforms are retained, ordered by reported activity.
+Source dataset: https://fedidbcdn.com/datasets/servers/2026-10-18-b2433e97/servers-2026-10-18.json.gz
+License: FediDB-CC-BY-4.0.txt. Server listings are not verified username matches.
+
+Collected sites: public server metadata and public site links.
+Only site-level URL templates and detection rules are distributed.
+No search history, proxy credentials or profile records are distributed.
+
+Misskey directory: https://github.com/joinmisskey/api
+PeerTube index: https://instances.joinpeertube.org/api/v1/instances/hosts
+Only factual server domains are retained.

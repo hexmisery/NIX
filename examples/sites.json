@@ -1,0 +1,36 @@
+{
+  "format": "nix-sites",
+  "version": 1,
+  "sites": [
+    {
+      "present": [],
+      "probe": "https://meta.discourse.org/u/{username}.json",
+      "absent": [],
+      "engine": "Discourse",
+      "exists_code": 200,
+      "disabled": false,
+      "profile": "https://meta.discourse.org/u/{username}",
+      "missing_code": 404,
+      "category": "Форумы",
+      "json_path": "user",
+      "kind": "json_user",
+      "known": "",
+      "site": "Discourse Meta"
+    },
+    {
+      "present": [],
+      "probe": "https://mastodon.social/api/v1/accounts/lookup?acct={username}",
+      "absent": [],
+      "engine": "Mastodon",
+      "exists_code": 200,
+      "disabled": false,
+      "profile": "https://mastodon.social/@{username}",
+      "missing_code": 404,
+      "category": "Социальные сети",
+      "json_path": "",
+      "kind": "json_user",
+      "known": "",
+      "site": "Mastodon.social"
+    }
+  ]
+}
