@@ -31,7 +31,9 @@ def probe():
             if ready:
                 for page in ("sites", "discovery", "proxies", "settings", "about"):
                     window.evaluate_js(f"NIX.go({json.dumps(page)})")
-                    assert window.evaluate_js("document.querySelector('main').children.length > 0")
+                    assert window.evaluate_js(
+                        "document.querySelector('main').children.length > 0"
+                    )
                 assert window.evaluate_js("NIX.state.account === ''")
                 result["passed"] = True
                 break

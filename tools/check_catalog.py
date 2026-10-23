@@ -71,11 +71,12 @@ async def run(options):
     folder = options.output.resolve()
     folder.mkdir(parents=True, exist_ok=True)
     path = folder / "availability.jsonl"
+    target_set = set(targets)
     previous = {}
     if path.exists():
         for line in path.read_text(encoding="utf-8").splitlines():
             row = json.loads(line)
-            if row.get("origin") in targets:
+            if row.get("origin") in target_set:
                 previous[row["origin"]] = row
     counts = Counter(row["state"] for row in previous.values())
     queue = asyncio.Queue()
@@ -101,6 +102,7 @@ async def run(options):
 
     with path.open("a", encoding="utf-8") as output:
         async with Network(concurrency=64, timeout=6) as net:
+
             async def worker():
                 nonlocal checked
                 while True:
@@ -119,11 +121,10 @@ async def run(options):
                             json.dumps(report, indent=2), encoding="utf-8"
                         )
                         print(json.dumps(report), flush=True)
+
             await asyncio.gather(*(worker() for _ in range(64)))
     report = summary()
-    (folder / "summary.json").write_text(
-        json.dumps(report, indent=2), encoding="utf-8"
-    )
+    (folder / "summary.json").write_text(json.dumps(report, indent=2), encoding="utf-8")
     print(json.dumps(report), flush=True)
 
 

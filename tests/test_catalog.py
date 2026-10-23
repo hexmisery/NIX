@@ -11,7 +11,8 @@ def test_bundled_catalog_is_valid_and_deduplicated():
     assert len(profiles) == len(set(profiles))
     assert len(profiles) >= 20_000
     domains = {
-        urlsplit(profile.replace("{username}", "admin")).hostname for profile in profiles
+        urlsplit(profile.replace("{username}", "admin")).hostname
+        for profile in profiles
     }
     assert len(domains) >= 20_000
 

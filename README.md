@@ -31,7 +31,14 @@ Search history, collected sites, preferences and proxies are stored separately f
 
 ## macOS
 
-Builds and native-interface checks for Apple Silicon and Intel are run separately. Until the platform archives are available in Releases, use the source installation below.
+Download the archive for your Mac:
+
+- [Apple Silicon: M1, M2, M3, M4 and later](https://github.com/hexmisery/NIX/releases/latest/download/NIX-darwin-arm64.tar.gz)
+- [Intel](https://github.com/hexmisery/NIX/releases/latest/download/NIX-darwin-x64.tar.gz)
+
+Extract the archive and move `NIX.app` to Applications. Keep the application bundle intact. The app is not notarized; if macOS blocks the download, the source installation below is an alternative.
+
+To run from source:
 
 Install Python 3.11 or newer from [python.org](https://www.python.org/downloads/macos/), then:
 
@@ -50,7 +57,18 @@ macOS uses its native WebKit backend. Window effects can differ from Windows.
 
 The supported build target is Ubuntu 24.04 x64 with GTK and WebKitGTK. Other distributions may need different system packages.
 
-On Ubuntu 24.04, install the backend and build prerequisites:
+[Download Linux x64](https://github.com/hexmisery/NIX/releases/latest/download/NIX-linux-x64.tar.gz), then:
+
+```sh
+sudo apt update
+sudo apt install gir1.2-gtk-3.0 gir1.2-webkit2-4.1
+tar -xzf NIX-linux-x64.tar.gz
+./NIX/NIX
+```
+
+Keep the extracted `NIX` folder together. Older distributions with an older glibc may not run this build.
+
+To run from source on Ubuntu 24.04:
 
 ```sh
 sudo apt update
@@ -108,6 +126,10 @@ python tools/check_catalog.py --output catalog-check
 ```
 
 The check saves a resumable JSONL report and a summary. It distinguishes responding, redirected, restricted and unreachable sites. It does not verify profile detection or account ownership.
+
+[October 23 availability report](docs/catalog-check.md): 20,983 fixed origins responded on the same hostname. This is a homepage availability result, not a count of verified profile detectors.
+
+Platform builds are checked in [GitHub Actions](https://github.com/hexmisery/NIX/actions/workflows/build.yml): unit tests, the native interface and Python bridge from source, and `--help` in the frozen application. These checks do not cover every feature in the packaged macOS/Linux GUI.
 
 ## Limits
 
