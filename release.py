@@ -2,9 +2,6 @@ from pathlib import Path
 import platform
 import shutil
 
-from nickatlas import __version__
-
-
 def package():
     root = Path(__file__).resolve().parent
     output = root / "release"
@@ -12,7 +9,7 @@ def package():
     system = platform.system().lower()
     machine = platform.machine().lower()
     arch = {"amd64": "x64", "x86_64": "x64", "aarch64": "arm64"}.get(machine, machine)
-    name = f"NIX-{__version__}-{system}-{arch}"
+    name = f"NIX-{system}-{arch}"
     target = "NIX.app" if system == "darwin" else "NIX"
     if not (root / "dist" / target).is_dir():
         raise FileNotFoundError("Run build.py before packaging")

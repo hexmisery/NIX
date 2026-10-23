@@ -5,50 +5,45 @@ permissions:
   contents: read
 jobs:
   build:
+    timeout-minutes: 20
     strategy:
       fail-fast: false
       matrix:
-        os: [windows-latest, macos-latest, ubuntu-24.04]
+        os: [macos-15, macos-15-intel, ubuntu-24.04]
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - run: python -m pip install -r requirements.txt pyinstaller==6.22.3
-      - name: GTK dependencies
+      - name: Linux system libraries
         if: runner.os == 'Linux'
         run: |
           sudo apt-get update
-          sudo apt-get install -y libgirepository1.0-dev libcairo2-dev pkg-config gir1.2-webkit2-4.1
-          python -m pip install PyGObject==3.48.2 pycairo
-      - run: python -m compileall -q nickatlas
+          sudo apt-get install -y libgirepository1.0-dev libcairo2-dev pkg-config gir1.2-gtk-3.0 gir1.2-webkit2-4.1 xvfb
+      - run: python -m pip install -r requirements.txt -r requirements-dev.txt
+      - name: Linux Python backend
+        if: runner.os == 'Linux'
+        run: python -m pip install PyGObject==3.48.2 pycairo
+      - run: python -m pytest tests -q
+      - name: Native interface on Linux
+        if: runner.os == 'Linux'
+        env:
+          WEBKIT_DISABLE_DMABUF_RENDERER: '1'
+        run: xvfb-run -a python tools/native_smoke.py
+      - name: Native interface on macOS
+        if: runner.os == 'macOS'
+        run: python tools/native_smoke.py
       - run: python build.py
+      - name: Frozen application on Linux
+        if: runner.os == 'Linux'
+        run: dist/NIX/NIX --help
+      - name: Frozen application on macOS
+        if: runner.os == 'macOS'
+        run: dist/NIX.app/Contents/MacOS/NIX --help
       - run: python release.py
       - uses: actions/upload-artifact@v4
         with:
           name: NIX-${{ matrix.os }}
           path: release/NIX-*
           if-no-files-found: error
-  release:
-    if: startsWith(github.ref, 'refs/tags/v')
-    needs: build
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-    steps:
-      - uses: actions/download-artifact@v4
-        with:
-          path: release
-          merge-multiple: true
-      - name: Create draft release
-        env:
-          GH_TOKEN: ${{ github.token }}
-          GH_REPO: ${{ github.repository }}
-          RELEASE_TAG: ${{ github.ref_name }}
-        run: |
-          if gh release view "$RELEASE_TAG" >/dev/null 2>&1; then
-            gh release upload "$RELEASE_TAG" release/* --clobber
-          else
-            gh release create "$RELEASE_TAG" release/* --verify-tag --draft --title "NIX $RELEASE_TAG" --generate-notes
-          fi

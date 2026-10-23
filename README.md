@@ -29,7 +29,44 @@ Open **Discovery**, select a region and press **Start** to collect sites. **Unti
 
 Search history, collected sites, preferences and proxies are stored separately from the executable. Replacing the executable keeps that data. Share the catalog export when transferring sites; it excludes search history and proxy credentials.
 
-## Run from source
+## macOS
+
+Builds and native-interface checks for Apple Silicon and Intel are run separately. Until the platform archives are available in Releases, use the source installation below.
+
+Install Python 3.11 or newer from [python.org](https://www.python.org/downloads/macos/), then:
+
+```sh
+git clone https://github.com/hexmisery/NIX.git
+cd NIX
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install -r requirements.txt
+python run.py
+```
+
+macOS uses its native WebKit backend. Window effects can differ from Windows.
+
+## Linux
+
+The supported build target is Ubuntu 24.04 x64 with GTK and WebKitGTK. Other distributions may need different system packages.
+
+On Ubuntu 24.04, install the backend and build prerequisites:
+
+```sh
+sudo apt update
+sudo apt install git python3-venv python3-dev build-essential pkg-config libgirepository1.0-dev libcairo2-dev gir1.2-gtk-3.0 gir1.2-webkit2-4.1
+git clone https://github.com/hexmisery/NIX.git
+cd NIX
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install -r requirements.txt
+python -m pip install PyGObject==3.48.2 pycairo
+python run.py
+```
+
+Linux uses an opaque window. Desktop transparency is currently implemented for Windows and macOS.
+
+## Run from source on Windows
 
 Python 3.11 or newer:
 
@@ -44,7 +81,7 @@ python -m pip install -r requirements.txt
 python run.py
 ```
 
-Windows uses WebView2. macOS uses WebKit. Linux needs a GTK/WebKit backend; consult [pywebview's Linux installation instructions](https://pywebview.flowrl.com/guide/installation.html#linux). The published executable is tested on Windows; macOS and Linux require building from source and have not been validated for this release.
+Windows uses WebView2. See [pywebview's installation instructions](https://pywebview.flowrl.com/guide/installation.html) for backend details.
 
 A limited command-line search:
 
@@ -64,6 +101,14 @@ python build.py
 
 The build writes the desktop application to `dist/`. Keep the complete output folder together. On Windows, `python build.py --onefile` creates a standalone executable in `standalone/`.
 
+To check whether catalog sites respond:
+
+```sh
+python tools/check_catalog.py --output catalog-check
+```
+
+The check saves a resumable JSONL report and a summary. It distinguishes responding, redirected, restricted and unreachable sites. It does not verify profile detection or account ownership.
+
 ## Limits
 
 A matching username does not prove that accounts belong to the same person. A **Confirmed** result means the site's response matched the available identity checks. It does not verify ownership. **Unverified** results need manual review. Login walls, CAPTCHAs, rate limits, changed page layouts and offline sites can prevent a result.
@@ -76,4 +121,4 @@ Use public pages within the sites' access rules. NIX does not bypass authenticat
 
 NIX code is MIT licensed. Bundled datasets, fonts and libraries retain their own licenses; see [LICENSE.txt](LICENSE.txt) and [licenses/ATTRIBUTION.txt](licenses/ATTRIBUTION.txt). FediDB-derived data is CC BY 4.0. WhatsMyName is CC BY-SA 4.0. The Social Analyzer dataset retains AGPL-3.0 terms.
 
-Author: [@hexmisery](https://github.com/hexmisery).
+Author: [@hexm1sery](https://github.com/hexmisery).
